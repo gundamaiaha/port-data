@@ -1,18 +1,24 @@
 package com.dataport.main;
 
+import com.dataport.entitysql.Interpreter;
+import com.dataport.entitysql.InterpreterSpecialityMap;
 import com.dataport.pojo.Agent;
 import com.dataport.service.AgentService;
 
+import java.io.IOException;
 import java.util.List;
 
 public class DataPortProcessor {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         
         //reading agents csv and getting all agent beans
         List<Agent> agents = new AgentService().buildAgentsFromCsv();
         System.out.println("agents = " + agents);
         System.out.println("no of agents = "+agents.size());
+
+        new Interpreter().generateInterpreterSql(agents);
+        new InterpreterSpecialityMap().generateInterpreterSpecialityMap(agents);
         
 
 
