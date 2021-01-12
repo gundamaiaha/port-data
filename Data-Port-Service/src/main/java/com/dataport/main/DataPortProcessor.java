@@ -1,7 +1,7 @@
 package com.dataport.main;
 
 import com.dataport.entitysql.Interpreter;
-import com.dataport.entitysql.InterpreterSpecialityMap;
+//import com.dataport.entitysql.InterpreterSpecialityMap;
 import com.dataport.pojo.Agent;
 import com.dataport.service.AgentService;
 
@@ -12,16 +12,22 @@ public class DataPortProcessor {
 
     public static void main(String[] args) throws IOException {
         
+    	DataPortProcessor dataPortProcessor = new DataPortProcessor();
+        
+    	dataPortProcessor.GenerateInterpreterRelatedSQL();
+
+    }
+    
+    private void GenerateInterpreterRelatedSQL() throws IOException {
         //reading agents csv and getting all agent beans
         List<Agent> agents = new AgentService().buildAgentsFromCsv();
         System.out.println("agents = " + agents);
         System.out.println("no of agents = "+agents.size());
-
-        new Interpreter().generateInterpreterSql(agents);
-        new InterpreterSpecialityMap().generateInterpreterSpecialityMap(agents);
         
+        Interpreter interpreter = new Interpreter();
+        interpreter.generateInterpreterSql(agents);
 
-
+//        new InterpreterSpecialityMap().generateInterpreterSpecialityMap(agents);
     }
 
 }
