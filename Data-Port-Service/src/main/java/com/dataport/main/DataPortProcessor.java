@@ -20,8 +20,9 @@ public class DataPortProcessor {
         
     	DataPortProcessor dataPortProcessor = new DataPortProcessor();
         
-    	dataPortProcessor.generateInterpreterRelatedSQL();
-
+//    	dataPortProcessor.generateInterpreterRelatedSQL();
+    	dataPortProcessor.generateCustomerRelatedSQL();
+    	
     }
     
     private void generateInterpreterRelatedSQL() throws IOException {
