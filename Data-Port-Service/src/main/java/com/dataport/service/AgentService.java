@@ -26,10 +26,6 @@ public class AgentService {
               HeaderColumnNameMappingStrategy strategy= new HeaderColumnNameMappingStrategy();
               strategy.setType(Agent.class);
 
-//              HeaderColumnNameTranslateMappingStrategy strategy =
-//                      new HeaderColumnNameTranslateMappingStrategy();
-//              strategy.setType(Agent.class);
-
 
               agents = csvToBean.parse(strategy,
                       csvReader);
