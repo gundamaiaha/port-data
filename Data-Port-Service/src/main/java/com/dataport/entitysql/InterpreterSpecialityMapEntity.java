@@ -2,9 +2,11 @@ package com.dataport.entitysql;
 
 import com.dataport.pojo.Agent;
 import com.dataport.util.SqlFileGenerator;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -64,7 +66,7 @@ public class InterpreterSpecialityMapEntity {
 //        fileWriter.write(interpreter_speciality_data_sql.toString());
 //        fileWriter.close();
 
-        SqlFileGenerator.generateSql("src/main/resources/sql/interpreter_vridb_interpreter.sql", interpreter_speciality_data_sql.toString());
+        SqlFileGenerator.generateSql("src/main/resources/sql/interpreter_vridb_interpreter_speciality_map.sql", interpreter_speciality_data_sql.toString());
 
 
     }

@@ -39,6 +39,10 @@ public class UserEntity {
                     lastName = userNameParts[1];
                 }
             }
+            String phoneNumber= user.getSms();
+            if(StringUtils.isNotBlank(phoneNumber)){
+                phoneNumber="+"+phoneNumber;
+            }
 
 
             user_data_sql.append("('")
@@ -51,7 +55,7 @@ public class UserEntity {
                     .append(firstName).append("','")
                     .append(lastName).append("','")
                     .append("").append("','")
-                    .append("+" + user.getSms()).append("','")
+                    .append(phoneNumber).append("','")
 
                     //street1,street2,city,state,country,postalcode - 6
                     .append("").append("','")
@@ -70,7 +74,8 @@ public class UserEntity {
                     //designation,image_url,provider,provider_id,disabled,locked,expired
                     .append(NULL).append(",")
                     .append(NULL).append(",'")
-                    .append("local").append("',")
+                    .append("local").append("','")
+                    .append("").append("',")
                     .append("b'0'").append(",")
                     .append("b'0'").append(",")
                     .append("b'0'").append(",")
