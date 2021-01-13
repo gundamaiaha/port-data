@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 
 public class DataPortProcessor {
 
-    public static void main(String[] args) throws IOException {
-        
-    	DataPortProcessor dataPortProcessor = new DataPortProcessor();
-        
-    	dataPortProcessor.generateInterpreterRelatedSQL();
-    	dataPortProcessor.generateCustomerRelatedSQL();
+	public static void main(String[] args) throws IOException {
+
+		DataPortProcessor dataPortProcessor = new DataPortProcessor();
+
+//    	dataPortProcessor.generateInterpreterRelatedSQL();
+		dataPortProcessor.generateCustomerRelatedSQL();
 
     }
     
