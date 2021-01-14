@@ -69,6 +69,11 @@ public class DataPortProcessor {
 
         NumberEntity numberEntity= new NumberEntity();
         numberEntity.generateNumbersSqlForGuest(customers);
+        numberEntity.generateNumbersSqlForMemberWithOnlyCreditPlan(customers);
+
+
+
+
 
 
     }
