@@ -1,10 +1,12 @@
 package com.dataport.entitysql;
 
+import com.dataport.pojo.CreditGroupWithOwner;
 import com.dataport.pojo.Customer;
 import com.dataport.util.SqlFileGenerator;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 public class NumberEntity {
 
@@ -100,7 +102,7 @@ public class NumberEntity {
                if(StringUtils.isBlank(customer.getCredit_groups_id()) && StringUtils.isNotBlank(customer.getCredit_plan_id())){
                    member_number_data_sql.append("('")
                            //number,number_type_id,twilio_number_sid,owned_by,owned_by_type
-                           .append(customer.getPhone()).append("','")
+                           .append("+"+customer.getPhone()).append("','")
                            .append("twilio").append("',")
                            .append(NULL).append(",'")
                            .append(customer.getId()).append("','")
@@ -110,8 +112,8 @@ public class NumberEntity {
                            .append(NULL).append(",'")
                            .append(customer.getId()).append("',")
                            .append(NULL).append(",'")
-                           .append("Credit-Plan").append("',")
-                           .append(NULL).append(",'")
+                           .append("Credit-Plan").append("','")
+                           .append(customer.getCredit_plan_id()).append("','")
 
                            //mins_limit_type,mins_paid,mins_prepaid,mins_used,mins_owed,mins_updated_at
                            .append(customer.getMins_type()).append("',")
@@ -142,7 +144,77 @@ public class NumberEntity {
         System.out.println("============== member_number_data_sql =============== ");
         System.out.println(member_number_data_sql.toString());
 
-        SqlFileGenerator.generateSql("src/main/resources/sql/member_vri_number_with_credit_plan.sql", member_number_data_sql.toString());
+        SqlFileGenerator.generateSql("src/main/resources/sql/customer_vri_number_with_credit_plan.sql", member_number_data_sql.toString());
+    }
+
+
+
+    public void generateNumbersSqlForCreditGroups(List<Customer> customers,Map<String, CreditGroupWithOwner> creditGroupWithOwnerMap){
+        final StringBuilder user_number_data_sql =
+                new StringBuilder("USE `convovridb` ;\n\n");
+        user_number_data_sql.append("INSERT IGNORE INTO number (")
+                .append("number,number_type_id,twilio_number_sid,owned_by,owned_by_type,owned_by_desc,used_by,used_by_desc,credit_type,credit_plan_id_or_group_id," +
+                        "mins_limit_type,mins_paid,mins_prepaid,mins_used,mins_owed,mins_updated_at" +
+                        ",mins_reloaded_at,expire_on,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by) ")
+                .append(" VALUES\n");
+        String NULL = null;
+        for (Customer customer : customers) {
+
+            //skip the customers who don't have phone number
+            if(StringUtils.isBlank(customer.getPhone())){
+                continue;
+            }
+             //skipping for guest users and credit group that is not matched with selected credit groups
+                if("guest".equalsIgnoreCase(customer.getRole()) || !creditGroupWithOwnerMap.containsKey(customer.getCredit_groups_id())){
+                        continue;
+                }
+            final CreditGroupWithOwner creditGroupWithOwner = creditGroupWithOwnerMap.get(customer.getCredit_groups_id());
+
+            user_number_data_sql.append("('")
+                            //number,number_type_id,twilio_number_sid,owned_by,owned_by_type
+                            .append("+"+customer.getPhone()).append("','")
+                            .append("twilio").append("',")
+                            .append(NULL).append(",'")
+                            .append(creditGroupWithOwner.getOwnerId()).append("','")
+                            .append("person").append("','")
+
+                            //owned_by_desc,used_by,used_by_desc,credit_type,credit_plan_id_or_group_id
+                            .append(creditGroupWithOwner.getOwnerName()).append("','")
+                            .append(customer.getId()).append("','")
+                            .append(customer.getName()).append("','")
+                            .append("Credit-Group").append("','")
+                            .append(customer.getCredit_groups_id()).append("','")
+
+                            //mins_limit_type,mins_paid,mins_prepaid,mins_used,mins_owed,mins_updated_at
+                            .append(customer.getMins_type()).append("',")
+                            .append(customer.getMins_paid()).append(",")
+                            .append(customer.getMins_prepaid()).append(",")
+                            .append(customer.getMins_used()).append(",")
+                            .append(customer.getMins_owed()).append(",")
+                            .append(NULL).append(",")
+
+                            //mins_reloaded_at,expire_on,status,created_on
+                            .append(NULL).append(",")
+                            .append(NULL).append(",'")
+                            .append("active").append("','")
+                            .append(customer.getInserted_at()).append("',")
+
+                            //created_by,modified_on,modified_by,deleted_on,deleted_by
+                            .append(NULL).append(",'")
+                            .append(customer.getUpdated_at()).append("',")
+                            .append(NULL).append(",")
+                            .append(NULL).append(",")
+                            .append(NULL).append("),\n");
+
+        }
+        user_number_data_sql.deleteCharAt(user_number_data_sql.lastIndexOf(","));
+        user_number_data_sql.append(";");
+
+        System.out.println("============== user_number_data_sql =============== ");
+        System.out.println(user_number_data_sql.toString());
+
+        SqlFileGenerator.generateSql("src/main/resources/sql/customer_vri_number_with_credit_group.sql", user_number_data_sql.toString());
+
     }
 
 

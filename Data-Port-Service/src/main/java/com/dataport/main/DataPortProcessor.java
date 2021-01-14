@@ -1,11 +1,12 @@
 package com.dataport.main;
 
 import com.dataport.entitysql.*;
-//import com.dataport.entitysql.InterpreterSpecialityMap;
 import com.dataport.pojo.Agent;
+import com.dataport.pojo.CreditGroupWithOwner;
 import com.dataport.pojo.Customer;
 import com.dataport.pojo.User;
 import com.dataport.service.AgentService;
+import com.dataport.service.CreditGroupService;
 import com.dataport.service.CustomerService;
 import com.dataport.service.UserService;
 
@@ -60,19 +61,23 @@ public class DataPortProcessor {
         System.out.println("customers = " + customers);
         System.out.println("no of customers = " + customers.size());
         
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.generateUserAuthDbSql(customers);
-
-        CustomerRoleMapEntity customerRoleMapEntity= new CustomerRoleMapEntity();
-        customerRoleMapEntity.generateUserRoleMapSql(customers);
-
-
+//        CustomerEntity customerEntity = new CustomerEntity();
+//        customerEntity.generateUserAuthDbSql(customers);
+//
+//        CustomerRoleMapEntity customerRoleMapEntity= new CustomerRoleMapEntity();
+//        customerRoleMapEntity.generateUserRoleMapSql(customers);
+//
+//
         NumberEntity numberEntity= new NumberEntity();
         numberEntity.generateNumbersSqlForGuest(customers);
         numberEntity.generateNumbersSqlForMemberWithOnlyCreditPlan(customers);
+        
+        //get Selected CreditGroup owners Map
+        CreditGroupService creditGroupService= new CreditGroupService();
+        final Map<String, CreditGroupWithOwner> creditGroupWithOwnersMap = creditGroupService.getCreditGroupWithOwners(customers);
 
-
-
+        //generate number sql for selected credit group
+        numberEntity.generateNumbersSqlForCreditGroups(customers,creditGroupWithOwnersMap);
 
 
 
