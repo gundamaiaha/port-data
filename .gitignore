@@ -5,3 +5,5 @@ Data-Port-Service/.settings/org.eclipse.jdt.core.prefs
 Data-Port-Service/.settings/org.eclipse.m2e.core.prefs
 *.csv
 *.sql
+Data-Port-Service/.DS_Store
+.DS_Store
