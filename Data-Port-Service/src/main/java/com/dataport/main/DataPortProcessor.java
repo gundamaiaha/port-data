@@ -66,7 +66,15 @@ public class DataPortProcessor {
         CustomerRoleMapEntity customerRoleMapEntity= new CustomerRoleMapEntity();
         customerRoleMapEntity.generateUserRoleMapSql(customers);
 
-//        new InterpreterSpecialityMap().generateInterpreterSpecialityMap(agents);
+
+        NumberEntity numberEntity= new NumberEntity();
+        numberEntity.generateNumbersSqlForGuest(customers);
+
+
     }
+
+
+
+
     
 }
