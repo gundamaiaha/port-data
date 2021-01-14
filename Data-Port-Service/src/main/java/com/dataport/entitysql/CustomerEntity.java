@@ -33,10 +33,10 @@ public class CustomerEntity {
             if (StringUtils.isNotBlank(customer.getRegister_type()) && !"email".equalsIgnoreCase(customer.getRegister_type())) {
                 provider = customer.getRegister_type();
             }
-            String phoneNumber= customer.getPhone();
-            if(StringUtils.isNotBlank(phoneNumber)){
-                phoneNumber="+"+phoneNumber;
-            }
+//            String phoneNumber= customer.getPhone();
+//            if(StringUtils.isNotBlank(phoneNumber)){
+//                phoneNumber="+"+phoneNumber;
+//            }
 
 
 
@@ -51,7 +51,7 @@ public class CustomerEntity {
                     .append(firstName).append("','")
                     .append(lastName).append("','")
                     .append("").append("','")
-                    .append(phoneNumber).append("','")
+                    .append(customer.getCellphone()).append("','")
 
                     //street1,street2,city,state,country,postalcode - 6
                     .append("").append("','")
