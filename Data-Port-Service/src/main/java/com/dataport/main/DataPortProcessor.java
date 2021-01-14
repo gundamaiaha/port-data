@@ -51,6 +51,7 @@ public class DataPortProcessor {
 
 
 
+
     }
 
     private void generateCustomerRelatedSQL() throws IOException {
@@ -61,6 +62,9 @@ public class DataPortProcessor {
         
         CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.generateUserAuthDbSql(customers);
+
+        CustomerRoleMapEntity customerRoleMapEntity= new CustomerRoleMapEntity();
+        customerRoleMapEntity.generateUserRoleMapSql(customers);
 
 //        new InterpreterSpecialityMap().generateInterpreterSpecialityMap(agents);
     }
