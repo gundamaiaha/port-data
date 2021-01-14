@@ -29,18 +29,10 @@ public class CustomerEntity {
             String email = customer.getEmail().replaceAll("'","\\\\'");
             String firstName = customer.getName().replaceAll("'","\\\\'");
             String lastName = "";
-            String provider = "local";
-            if (StringUtils.isNotBlank(customer.getRegister_type()) && !"email".equalsIgnoreCase(customer.getRegister_type())) {
-                provider = customer.getRegister_type();
+
+            if("admin".equalsIgnoreCase(customer.getRole())){
+                continue;
             }
-//            String phoneNumber= customer.getPhone();
-//            if(StringUtils.isNotBlank(phoneNumber)){
-//                phoneNumber="+"+phoneNumber;
-//            }
-
-
-
-
             user_data_sql.append("('")
                     //userid,email,username,password,email_verified,firstname,lastname,name,phonenumber --9
                     .append(customer.getId()).append("','")
@@ -70,7 +62,7 @@ public class CustomerEntity {
                     //designation,image_url,provider,provider_id,disabled,locked,expired
                     .append(NULL).append(",")
                     .append(NULL).append(",'")
-                    .append(provider).append("','")
+                    .append("local").append("','")
                     .append("").append("',")
                     .append("b'0'").append(",")
                     .append("b'0'").append(",")

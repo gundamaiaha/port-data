@@ -17,23 +17,8 @@ public class CustomerRoleMapEntity {
                 .append(" VALUES\n");
         String NULL = null;
         for (Customer customer : customers) {
-            if ("guest".equalsIgnoreCase(customer.getRole()) || "member".equalsIgnoreCase(customer.getRole())) {
-                String role = "ROLE_SL_GUEST";
-                if ("member".equalsIgnoreCase(customer.getRole())) {
-                    role = "ROLE_SL_MEMBER";
-                }
-
-                user_role_data_sql.append("('")
-                        //user_id,role_id,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by
-                        .append(customer.getId()).append("','")
-                        .append(role).append("',")
-                        .append("'active'").append(",'")
-                        .append(customer.getInserted_at()).append("',")
-                        .append(NULL).append(",'")
-                        .append(customer.getUpdated_at()).append("',")
-                        .append(NULL).append(",")
-                        .append(NULL).append(",")
-                        .append(NULL).append("),\n");
+            if("admin".equalsIgnoreCase(customer.getRole())){
+                continue;
             }
             user_role_data_sql.append("('")
                     //user_id,role_id,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by
