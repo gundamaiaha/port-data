@@ -31,6 +31,14 @@ public class BusinessEntity {
         + "createdon,createdby,modifiedon,modifiedby,deletedon,deletedby) ")
         .append("VALUES\n");
         
+        final StringBuilder number_data_sql = new StringBuilder("USE `convovridb` ;\n\n");
+        number_data_sql.append("INSERT IGNORE INTO number (")
+        .append("number,number_type_id,twilio_number_sid,owned_by,owned_by_type,owned_by_desc,used_by,used_by_desc,credit_type,credit_plan_id_or_group_id," +
+                "mins_limit_type,mins_paid,mins_prepaid,mins_used,mins_owed,mins_updated_at" +
+                ",mins_reloaded_at,expire_on,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by) ")
+        .append(" VALUES\n");
+        
+        
         for (Business business : businesses) {
  
         	String username = business.getUsername();
@@ -55,12 +63,15 @@ public class BusinessEntity {
 				phoneNumber = customer.getPhone_extension();
 				type = "Guest";
         	} else {
+        		
+        		//Check to add the business customer 
+        		//Business number
+        		//Credit group
+        		//Credit plan
+        		
         		if (business.getPhone_number().substring(0, 2).equals("44")) {
         			type = "Member";
         			phoneNumber = "+" + business.getPhone_number();
-        			
-//        			if (customer.)
-        			
         		} else if (business.getPhone_number().substring(0, 1).equals("0")) {
         			type = "External"; 
         			phoneNumber = "+44" + business.getPhone_number().substring(1);
@@ -70,6 +81,8 @@ public class BusinessEntity {
         			continue;
         		}
         	}
+        	
+        	
  
         	business_user_map_data_sql.append("('")
         		.append(business.getId())

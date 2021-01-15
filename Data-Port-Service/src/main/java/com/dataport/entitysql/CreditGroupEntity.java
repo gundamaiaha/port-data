@@ -21,6 +21,9 @@ public class CreditGroupEntity {
         
         ArrayList<String> creditGroupids = new ArrayList<String>();
         
+        FileWriter fileWriter = new FileWriter("src/main/resources/sql/creditgroup_vridb_creditgroup.sql");
+        
+        
         for (Customer customer : customers) {
         	
         	if (customer.getCredit_groups_id().isEmpty()) {
@@ -29,16 +32,23 @@ public class CreditGroupEntity {
         	if (!customer.getRole().equals("account_manager")) {
         		continue;
         	}
-        	if (customer.getPhone().isEmpty()) {
-        		continue;
-        	}
-//        	if (creditGroupids.contains(customer.getCredit_groups_id())) {
+//        	if (customer.getPhone().isEmpty()) {
 //        		continue;
 //        	}
+
         	
         	for (CreditGroup creditGroup : creditGroups) {
 
         		if (customer.getCredit_groups_id().equals(creditGroup.getId())) {
+        			
+                	if (creditGroupids.contains(customer.getCredit_groups_id())) {
+                		System.out.println("Credit Group Already Exists");
+                		System.out.println(creditGroup.toString());
+                		fileWriter.write("Credit Group Already Exists");
+                		fileWriter.write(creditGroup.toString());
+                		continue;        	
+                	}
+        			
         			creditGroupids.add(customer.getCredit_groups_id());
         			credit_group_data_sql.append("('")
         				.append(creditGroup.getId())
@@ -87,7 +97,7 @@ public class CreditGroupEntity {
 
 
         //File interpreter_sql_file= new File("src/main/resources/sql/interpreter_vridb_interpreter.sql");
-        FileWriter fileWriter = new FileWriter("src/main/resources/sql/creditgroup_vridb_creditgroup.sql");
+
         fileWriter.write(credit_group_data_sql.toString());
         fileWriter.close();
 		

@@ -30,8 +30,8 @@ public class DataPortProcessor {
 
 //    	dataPortProcessor.generateInterpreterRelatedSQL();
 //		dataPortProcessor.generateCustomerRelatedSQL();
-//		dataPortProcessor.generateCreditGroupRelatedSQL();
-		dataPortProcessor.generateBusinessRelatedSQL();
+		dataPortProcessor.generateCreditGroupRelatedSQL();
+//		dataPortProcessor.generateBusinessRelatedSQL();
 
     }
 	
