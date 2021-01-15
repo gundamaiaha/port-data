@@ -2,10 +2,17 @@ package com.dataport.main;
 
 import com.dataport.entitysql.*;
 import com.dataport.pojo.Agent;
+
 import com.dataport.pojo.CreditGroupWithOwner;
 import com.dataport.pojo.Customer;
 import com.dataport.pojo.User;
 import com.dataport.service.AgentService;
+import com.dataport.pojo.Business;
+import com.dataport.pojo.CreditGroup;
+import com.dataport.pojo.Customer;
+import com.dataport.pojo.User;
+import com.dataport.service.AgentService;
+import com.dataport.service.BusinessService;
 import com.dataport.service.CreditGroupService;
 import com.dataport.service.CustomerService;
 import com.dataport.service.UserService;
@@ -22,9 +29,25 @@ public class DataPortProcessor {
 		DataPortProcessor dataPortProcessor = new DataPortProcessor();
 
 //    	dataPortProcessor.generateInterpreterRelatedSQL();
-		dataPortProcessor.generateCustomerRelatedSQL();
+//		dataPortProcessor.generateCustomerRelatedSQL();
+//		dataPortProcessor.generateCreditGroupRelatedSQL();
+		dataPortProcessor.generateBusinessRelatedSQL();
 
     }
+	
+	private void generateBusinessRelatedSQL() throws IOException {
+        //reading business csv and getting all business beans
+        List<Business> businesses = new BusinessService().buildBusinesssFromCsv();
+//        System.out.println("businesses = " + businesses);
+        System.out.println("no of businesses = " + businesses.size());
+        
+        List<Customer> customers = new CustomerService().buildCustomerFromCsv();
+//        System.out.println("customers = " + customers);
+        System.out.println("no of customers = " + customers.size());
+        
+        BusinessEntity businessEntity = new BusinessEntity();
+        businessEntity.generateBusiness(customers, businesses);
+	}
     
     private void generateInterpreterRelatedSQL() throws IOException {
         //reading agents csv and getting all agent beans
@@ -56,8 +79,8 @@ public class DataPortProcessor {
     }
 
     private void generateCustomerRelatedSQL() throws IOException {
-        //reading agents csv and getting all agent beans
-        List<Customer> customers = new CustomerService().buildAgentsFromCsv();
+        //reading customer csv and getting all customer beans
+        List<Customer> customers = new CustomerService().buildCustomerFromCsv();
         System.out.println("customers = " + customers);
         System.out.println("no of customers = " + customers.size());
         
@@ -80,6 +103,20 @@ public class DataPortProcessor {
         numberEntity.generateNumbersSqlForCreditGroups(customers,creditGroupWithOwnersMap);
 
 
+    }
+
+    private void generateCreditGroupRelatedSQL() throws IOException {
+        //reading credit group csv and getting all credit group beans
+        List<CreditGroup> creditGroups = new CreditGroupService().buildCreditGroupsFromCsv();
+//        System.out.println("creditGroups = " + creditGroups);
+        System.out.println("no of creditGroups = " + creditGroups.size());
+        
+        List<Customer> customers = new CustomerService().buildCustomerFromCsv();
+//        System.out.println("customers = " + customers);
+        System.out.println("no of customers = " + customers.size());
+        
+        CreditGroupEntity creditGroupEntity = new CreditGroupEntity();
+        creditGroupEntity.generateCreditGroups(customers, creditGroups);
 
     }
 

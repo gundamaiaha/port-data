@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 public class CreditGroupService {
 
 
@@ -60,5 +61,25 @@ public class CreditGroupService {
         return creditGroups.stream().map(CreditGroup::getId).collect(Collectors.toList());
     }
 
+    
+	public List<CreditGroup> buildCreditGroupsFromCsv() {
+		List<CreditGroup> creditGroups = new ArrayList<CreditGroup>();
+		final String file = "src/main/resources/csv/credit_groups.csv";
+		try {
+			CSVReader csvReader = new CSVReader(new FileReader(file));
+			CsvToBean<CreditGroup> csvToBean = new CsvToBean<CreditGroup>();
 
+			HeaderColumnNameMappingStrategy strategy = new HeaderColumnNameMappingStrategy();
+			strategy.setType(CreditGroup.class);
+
+			creditGroups = csvToBean.parse(strategy, csvReader);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return creditGroups;
+
+	}
 }
+
+

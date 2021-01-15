@@ -5,13 +5,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import com.dataport.pojo.CreditGroup;
 import com.dataport.pojo.Customer;
 import com.dataport.pojo.User;
 import com.dataport.util.SqlFileGenerator;
 import org.apache.commons.lang3.StringUtils;
 
 public class CustomerEntity {
-
+	
     public void generateUserAuthDbSql(List<Customer> customers) throws IOException {
 
         final StringBuilder user_data_sql =
