@@ -16,7 +16,7 @@ public class InterpreterEntity {
                 new StringBuilder("USE `convovridb` ;\n\n");
         interpreter_data_sql.append("INSERT IGNORE INTO interpreter VALUES\n");
         String NULL = null;
-
+        FileWriter fileWriter = new FileWriter("src/main/resources/sql/interpreter_vridb_interpreter.sql");
         for (Agent agent : agents) {
             interpreter_data_sql.append("('")
                     .append(agent.getUserId())
@@ -45,7 +45,7 @@ public class InterpreterEntity {
 
 
         //File interpreter_sql_file= new File("src/main/resources/sql/interpreter_vridb_interpreter.sql");
-        FileWriter fileWriter = new FileWriter("src/main/resources/sql/interpreter_vridb_interpreter.sql");
+
         fileWriter.write(interpreter_data_sql.toString());
         fileWriter.close();
 

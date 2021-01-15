@@ -1,18 +1,14 @@
 package com.dataport.entitysql;
 
+import com.dataport.pojo.Customer;
+import com.dataport.util.SqlFileGenerator;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-
-import com.dataport.pojo.CreditGroup;
-import com.dataport.pojo.Customer;
-import com.dataport.pojo.User;
-import com.dataport.util.SqlFileGenerator;
-import org.apache.commons.lang3.StringUtils;
 
 public class CustomerEntity {
-	
+
     public void generateUserAuthDbSql(List<Customer> customers) throws IOException {
 
         final StringBuilder user_data_sql =
@@ -25,15 +21,17 @@ public class CustomerEntity {
                 .append("VALUES\n");
 
         String NULL = null;
-
+        FileWriter fileWriter = new FileWriter("src/main/resources/sql/customer_userauth_user.sql");
         for (Customer customer : customers) {
-            String email = customer.getEmail().replaceAll("'","\\\\'");
-            String firstName = customer.getName().replaceAll("'","\\\\'");
+            String email = customer.getEmail().replaceAll("'", "\\\\'");
+            String firstName = customer.getName().replaceAll("'", "\\\\'");
             String lastName = "";
 
-            if("admin".equalsIgnoreCase(customer.getRole())){
+            if ("admin".equalsIgnoreCase(customer.getRole())) {
                 System.out.println("Reject Reason : Admin User");
                 System.out.println(customer);
+                fileWriter.write("Reject Reason : Admin User");
+                fileWriter.write(customer.toString());
                 continue;
             }
             user_data_sql.append("('")
@@ -93,32 +91,36 @@ public class CustomerEntity {
 
         System.out.println("============== userAuth_user_sql =============== ");
         System.out.println(user_data_sql.toString());
+        fileWriter.write(user_data_sql.toString());
+        fileWriter.close();
 
-        SqlFileGenerator.generateSql("src/main/resources/sql/customer_userauth_user.sql", user_data_sql.toString());
 
-         generateVriUserSql(customers);
+        generateVriUserSql(customers);
 
 
     }
 
-    private void generateVriUserSql(List<Customer> customers) {
+    private void generateVriUserSql(List<Customer> customers) throws IOException {
         final StringBuilder user_data_sql =
                 new StringBuilder("USE `convovridb` ;\n\n");
         user_data_sql.append("INSERT IGNORE INTO user(")
                 .append("id,firstname,lastname,email,token,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by) ")
                 .append("VALUES\n");
         String NULL = null;
+        FileWriter fileWriter = new FileWriter("src/main/resources/sql/customer_vri_user.sql");
         for (Customer customer : customers) {
 
-            if("admin".equalsIgnoreCase(customer.getRole())){
+            if ("admin".equalsIgnoreCase(customer.getRole())) {
                 System.out.println("Reject Reason : Admin User");
                 System.out.println(customer);
+                fileWriter.write("Reject Reason : Admin User");
+                fileWriter.write(customer.toString());
                 continue;
             }
 
             String userName = customer.getUsername();
-            String email = customer.getEmail().replaceAll("'","\\\\'");
-            String firstName = customer.getName().replaceAll("'","\\\\'");
+            String email = customer.getEmail().replaceAll("'", "\\\\'");
+            String firstName = customer.getName().replaceAll("'", "\\\\'");
             String lastName = "";
 
 
@@ -143,7 +145,8 @@ public class CustomerEntity {
         System.out.println("============== userAuth_user_sql =============== ");
         System.out.println(user_data_sql.toString());
 
-        SqlFileGenerator.generateSql("src/main/resources/sql/customer_vri_user.sql", user_data_sql.toString());
+       fileWriter.write(user_data_sql.toString());
+       fileWriter.close();
 
 
     }

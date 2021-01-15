@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +25,7 @@ public class InterpreterSpecialityMapEntity {
                         "modified_on,modified_by,deleted_on,deleted_by)")
                 .append("VALUES\n");
         String NULL = null;
+        FileWriter fileWriter = new FileWriter("src/main/resources/sql/interpreter_vridb_interpreter_speciality_map.sql");
 
         for (Agent agent : agents) {
 
@@ -61,13 +63,9 @@ public class InterpreterSpecialityMapEntity {
 
 
         //File interpreter_sql_file= new File("src/main/resources/sql/interpreter_vridb_interpreter.sql");
-//        FileWriter fileWriter = new FileWriter("src/main/resources/sql/interpreter_vridb_interpreter_speciality_map.sql");
-//        fileWriter.write(interpreter_speciality_data_sql.toString());
-//        fileWriter.close();
 
-        SqlFileGenerator.generateSql("src/main/resources/sql/interpreter_vridb_interpreter_speciality_map.sql", interpreter_speciality_data_sql.toString());
-
-
+        fileWriter.write(interpreter_speciality_data_sql.toString());
+        fileWriter.close();
     }
 
 }

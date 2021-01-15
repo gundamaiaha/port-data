@@ -4,6 +4,7 @@ import com.dataport.pojo.Agent;
 import com.dataport.pojo.User;
 import com.dataport.util.SqlFileGenerator;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class InterpreterProviderMapEntity {
                 .append("interpreter_id,provider_id,provider_user_id,provider_user_password,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by) ")
                 .append("VALUES\n");
         String NULL = null;
-
+        FileWriter fileWriter = new FileWriter("src/main/resources/sql/interpreter_vridb_interpreter_provider_map.sql");
         for(User user: users){
             if("agent".equalsIgnoreCase(user.getRole())) {
                 //interpreter_id,provider_id,provider_user_id,provider_user_password
@@ -42,7 +43,9 @@ public class InterpreterProviderMapEntity {
             }
             else{
                 System.out.println("Reject Reason : Not an Agent");
-                System.out.println("user = " + user);
+                System.out.println(user);
+                fileWriter.write("Reject Reason : Not an Agent");
+                fileWriter.write(user.toString());
             }
         }
 
@@ -53,7 +56,8 @@ public class InterpreterProviderMapEntity {
         System.out.println("============== interpreter_sql =============== ");
         System.out.println(interpreter_provider_data_sql.toString());
 
-        SqlFileGenerator.generateSql("src/main/resources/sql/interpreter_vridb_interpreter_provider_map.sql", interpreter_provider_data_sql.toString());
+       fileWriter.write(interpreter_provider_data_sql.toString());
+       fileWriter.close();
 
 
 

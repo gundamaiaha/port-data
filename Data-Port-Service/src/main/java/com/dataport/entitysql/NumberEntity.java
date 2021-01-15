@@ -5,6 +5,8 @@ import com.dataport.pojo.Customer;
 import com.dataport.util.SqlFileGenerator;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +89,7 @@ public class NumberEntity {
      *
      * @param customers
      */
-    public void generateNumbersSqlForMemberWithOnlyCreditPlan(List<Customer> customers) {
+    public void generateNumbersSqlForMemberWithOnlyCreditPlan(List<Customer> customers) throws IOException {
         final StringBuilder member_number_data_sql =
                 new StringBuilder("USE `convovridb` ;\n\n");
         member_number_data_sql.append("INSERT IGNORE INTO number (")
@@ -96,25 +98,34 @@ public class NumberEntity {
                         ",mins_reloaded_at,expire_on,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by) ")
                 .append(" VALUES\n");
         String NULL = null;
+        FileWriter fileWriter= new FileWriter("src/main/resources/sql/customer_vri_number_with_credit_plan.sql");
         for (Customer customer : customers) {
             if (!"member".equalsIgnoreCase(customer.getRole())) {
                 System.out.println("Reject Reason : Not a member");
                 System.out.println(customer);
+                fileWriter.write("Reject Reason : Not a member");
+                fileWriter.write(customer.toString());
                 continue;
             }
             if (StringUtils.isBlank(customer.getPhone())) {
                 System.out.println("Reject Reason : Phone Number is blank");
                 System.out.println(customer);
+                fileWriter.write("Reject Reason : Phone Number is blank");
+                fileWriter.write(customer.toString());
                 continue;
             }
             if(StringUtils.isNotBlank(customer.getCredit_groups_id())){
                 System.out.println("Reject Reason: Credit Group is not blank");
                 System.out.println(customer);
+                fileWriter.write("Reject Reason : Credit Group is not blank");
+                fileWriter.write(customer.toString());
                 continue;
             }
             if(StringUtils.isBlank(customer.getCredit_plan_id())){
                 System.out.println("Reject Reason: Credit Plan is  blank");
                 System.out.println(customer);
+                fileWriter.write("Reject Reason : Credit Plan is  blank");
+                fileWriter.write(customer.toString());
                 continue;
             }
 
@@ -162,11 +173,13 @@ public class NumberEntity {
         System.out.println("============== customer_vri_number_with_credit_plan =============== ");
         System.out.println(member_number_data_sql.toString());
 
-        SqlFileGenerator.generateSql("src/main/resources/sql/customer_vri_number_with_credit_plan.sql", member_number_data_sql.toString());
+        fileWriter.write(member_number_data_sql.toString());
+        fileWriter.close();
+
     }
 
 
-    public void generateNumbersSqlForCreditGroups(List<Customer> customers, Map<String, CreditGroupWithOwner> creditGroupWithOwnerMap) {
+    public void generateNumbersSqlForCreditGroups(List<Customer> customers, Map<String, CreditGroupWithOwner> creditGroupWithOwnerMap) throws IOException {
         final StringBuilder user_number_data_sql =
                 new StringBuilder("USE `convovridb` ;\n\n");
         user_number_data_sql.append("INSERT IGNORE INTO number (")
@@ -175,12 +188,18 @@ public class NumberEntity {
                         ",mins_reloaded_at,expire_on,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by) ")
                 .append(" VALUES\n");
         String NULL = null;
+        FileWriter fileWriter= new FileWriter("src/main/resources/sql/customer_vri_number_with_credit_group.sql");
+
         for (Customer customer : customers) {
+
+
 
             //skip the customers who don't have phone number
             if (StringUtils.isBlank(customer.getPhone())) {
                 System.out.println("Reject Reason : Phone Number is blank");
                 System.out.println(customer);
+                fileWriter.write("Reject Reason : Phone Number is blank");
+                fileWriter.write(customer.toString());
                 continue;
             }
 
@@ -188,12 +207,16 @@ public class NumberEntity {
             if ("guest".equalsIgnoreCase(customer.getRole()))  {
                 System.out.println("Reject Reason : Guest User");
                 System.out.println(customer);
+                fileWriter.write("Reject Reason : Guest User");
+                fileWriter.write(customer.toString());
                 continue;
             }
            // skipping for  credit group that is not matched with selected credit groups
             if(!creditGroupWithOwnerMap.containsKey(customer.getCredit_groups_id())){
                 System.out.println("Rejected Reason : Credit Group not matched with selected one.");
                 System.out.println("customer = " + customer);
+                fileWriter.write("Rejected Reason : Credit Group not matched with selected one.");
+                fileWriter.write(customer.toString());
                 continue;
             }
             final CreditGroupWithOwner creditGroupWithOwner = creditGroupWithOwnerMap.get(customer.getCredit_groups_id());
@@ -241,7 +264,10 @@ public class NumberEntity {
         System.out.println("============== customer_vri_number_with_credit_group =============== ");
         System.out.println(user_number_data_sql.toString());
 
-        SqlFileGenerator.generateSql("src/main/resources/sql/customer_vri_number_with_credit_group.sql", user_number_data_sql.toString());
+        fileWriter.write(user_number_data_sql.toString());
+        fileWriter.close();
+
+
 
     }
 

@@ -1,16 +1,17 @@
 package com.dataport.entitysql;
 
 import com.dataport.pojo.User;
-import com.dataport.util.SqlFileGenerator;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 public class UserEntity {
 
 
-    public void generateUserSqls(List<User> users, Map<String, String> userNamesMap) {
+    public void generateUserSqls(List<User> users, Map<String, String> userNamesMap) throws IOException {
 
         final StringBuilder user_data_sql =
                 new StringBuilder("USE `convouserauth` ;\n\n");
@@ -22,12 +23,16 @@ public class UserEntity {
                 .append("VALUES\n");
 
         String NULL = null;
+        FileWriter fileWriter = new FileWriter("src/main/resources/sql/interpreter_userauth_user.sql");
 
         for (User user : users) {
 
             if (!"AGENT".equalsIgnoreCase(user.getRole())) {
                 System.out.println("Rejected Reason : not an agent");
-                System.out.println("user = " + user);
+                System.out.println(user);
+                fileWriter.write("Rejected Reason : not an agent");
+                fileWriter.write(user.toString());
+
                 continue;
             }
 
@@ -105,25 +110,28 @@ public class UserEntity {
         System.out.println("============== interpreter_userauth_user.sql =============== ");
         System.out.println(user_data_sql.toString());
 
-        SqlFileGenerator.generateSql("src/main/resources/sql/interpreter_userauth_user.sql", user_data_sql.toString());
-
+        fileWriter.write(user_data_sql.toString());
+        fileWriter.close();
         generateVriUserSql(users, userNamesMap);
 
 
     }
 
 
-    private void generateVriUserSql(List<User> users, Map<String, String> userNamesMap) {
+    private void generateVriUserSql(List<User> users, Map<String, String> userNamesMap) throws IOException {
         final StringBuilder user_data_sql =
                 new StringBuilder("USE `convovridb` ;\n\n");
         user_data_sql.append("INSERT IGNORE INTO user(")
                 .append("id,firstname,lastname,email,token,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by) ")
                 .append("VALUES\n");
         String NULL = null;
+        FileWriter fileWriter = new FileWriter("src/main/resources/sql/interpreter_vri_user.sql");
         for (User user : users) {
             if (!"AGENT".equalsIgnoreCase(user.getRole())) {
                 System.out.println("Rejected Reason : not an agent");
-                System.out.println("user = " + user);
+                System.out.println(user);
+                fileWriter.write("Rejected Reason : not an agent");
+                fileWriter.write(user.toString());
                 continue;
             }
             String userName = userNamesMap.get(user.getUserId());
@@ -158,7 +166,8 @@ public class UserEntity {
         System.out.println("============== interpreter_vri_user_sql =============== ");
         System.out.println(user_data_sql.toString());
 
-        SqlFileGenerator.generateSql("src/main/resources/sql/interpreter_vri_user.sql", user_data_sql.toString());
+        fileWriter.write(user_data_sql.toString());
+        fileWriter.close();
 
 
     }

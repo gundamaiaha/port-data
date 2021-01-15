@@ -28,9 +28,9 @@ public class DataPortProcessor {
 
 		DataPortProcessor dataPortProcessor = new DataPortProcessor();
 
-//    	dataPortProcessor.generateInterpreterRelatedSQL();
+    	dataPortProcessor.generateInterpreterRelatedSQL();
 //		dataPortProcessor.generateCustomerRelatedSQL();
-		dataPortProcessor.generateCreditGroupRelatedSQL();
+//		dataPortProcessor.generateCreditGroupRelatedSQL();
 //		dataPortProcessor.generateBusinessRelatedSQL();
 
     }
