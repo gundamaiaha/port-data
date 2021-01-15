@@ -17,6 +17,8 @@ public class UserRoleMapEntity {
         String NULL = null;
         for (User user : users) {
             if (!"AGENT".equalsIgnoreCase(user.getRole())) {
+                System.out.println("Rejected Reason : not an agent");
+                System.out.println("user = " + user);
                 continue;
             }
             user_role_data_sql.append("('")
@@ -35,7 +37,7 @@ public class UserRoleMapEntity {
         user_role_data_sql.deleteCharAt(user_role_data_sql.lastIndexOf(","));
         user_role_data_sql.append(";");
 
-        System.out.println("============== userAuth_user_sql =============== ");
+        System.out.println("============== interpreter_vri_user_role_map.sql =============== ");
         System.out.println(user_role_data_sql.toString());
 
         SqlFileGenerator.generateSql("src/main/resources/sql/interpreter_vri_user_role_map.sql", user_role_data_sql.toString());

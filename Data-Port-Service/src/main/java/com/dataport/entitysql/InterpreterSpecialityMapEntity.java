@@ -34,7 +34,6 @@ public class InterpreterSpecialityMapEntity {
             Iterator<JsonElement> specialitesIterator = specialitiesArray.iterator();
             while (specialitesIterator.hasNext()) {
                 String speciality = specialitesIterator.next().getAsString();
-                System.out.println("speciality --> " + speciality);
 
 
                 interpreter_speciality_data_sql.append("('")

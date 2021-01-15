@@ -1,7 +1,6 @@
 package com.dataport.entitysql;
 
 import com.dataport.pojo.Customer;
-import com.dataport.pojo.User;
 import com.dataport.util.SqlFileGenerator;
 
 import java.util.List;
@@ -17,7 +16,9 @@ public class CustomerRoleMapEntity {
                 .append(" VALUES\n");
         String NULL = null;
         for (Customer customer : customers) {
-            if("admin".equalsIgnoreCase(customer.getRole())){
+            if ("admin".equalsIgnoreCase(customer.getRole())) {
+                System.out.println("Reject Reason : Admin User");
+                System.out.println(customer);
                 continue;
             }
             user_role_data_sql.append("('")

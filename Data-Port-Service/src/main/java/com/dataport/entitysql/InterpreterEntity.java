@@ -40,7 +40,7 @@ public class InterpreterEntity {
         interpreter_data_sql.deleteCharAt(interpreter_data_sql.lastIndexOf(","));
         interpreter_data_sql.append(";");
 
-        System.out.println("============== interpreter_sql =============== ");
+        System.out.println("============== interpreter_vridb_interpreter.sql =============== ");
         System.out.println(interpreter_data_sql.toString());
 
 

@@ -26,6 +26,8 @@ public class UserEntity {
         for (User user : users) {
 
             if (!"AGENT".equalsIgnoreCase(user.getRole())) {
+                System.out.println("Rejected Reason : not an agent");
+                System.out.println("user = " + user);
                 continue;
             }
 
@@ -39,9 +41,9 @@ public class UserEntity {
                     lastName = userNameParts[1];
                 }
             }
-            String phoneNumber= user.getSms();
-            if(StringUtils.isNotBlank(phoneNumber)){
-                phoneNumber="+"+phoneNumber;
+            String phoneNumber = user.getSms();
+            if (StringUtils.isNotBlank(phoneNumber)) {
+                phoneNumber = "+" + phoneNumber;
             }
 
 
@@ -100,12 +102,12 @@ public class UserEntity {
         user_data_sql.deleteCharAt(user_data_sql.lastIndexOf(","));
         user_data_sql.append(";");
 
-        System.out.println("============== userAuth_user_sql =============== ");
+        System.out.println("============== interpreter_userauth_user.sql =============== ");
         System.out.println(user_data_sql.toString());
 
         SqlFileGenerator.generateSql("src/main/resources/sql/interpreter_userauth_user.sql", user_data_sql.toString());
 
-        generateVriUserSql(users,userNamesMap);
+        generateVriUserSql(users, userNamesMap);
 
 
     }
@@ -120,6 +122,8 @@ public class UserEntity {
         String NULL = null;
         for (User user : users) {
             if (!"AGENT".equalsIgnoreCase(user.getRole())) {
+                System.out.println("Rejected Reason : not an agent");
+                System.out.println("user = " + user);
                 continue;
             }
             String userName = userNamesMap.get(user.getUserId());
@@ -151,7 +155,7 @@ public class UserEntity {
         user_data_sql.deleteCharAt(user_data_sql.lastIndexOf(","));
         user_data_sql.append(";");
 
-        System.out.println("============== userAuth_user_sql =============== ");
+        System.out.println("============== interpreter_vri_user_sql =============== ");
         System.out.println(user_data_sql.toString());
 
         SqlFileGenerator.generateSql("src/main/resources/sql/interpreter_vri_user.sql", user_data_sql.toString());

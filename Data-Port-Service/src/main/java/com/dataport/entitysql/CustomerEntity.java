@@ -32,6 +32,8 @@ public class CustomerEntity {
             String lastName = "";
 
             if("admin".equalsIgnoreCase(customer.getRole())){
+                System.out.println("Reject Reason : Admin User");
+                System.out.println(customer);
                 continue;
             }
             user_data_sql.append("('")
@@ -107,6 +109,12 @@ public class CustomerEntity {
                 .append("VALUES\n");
         String NULL = null;
         for (Customer customer : customers) {
+
+            if("admin".equalsIgnoreCase(customer.getRole())){
+                System.out.println("Reject Reason : Admin User");
+                System.out.println(customer);
+                continue;
+            }
 
             String userName = customer.getUsername();
             String email = customer.getEmail().replaceAll("'","\\\\'");
