@@ -45,14 +45,14 @@ public class CustomerEntity {
                     .append(lastName).append("','")
                     .append("").append("','")
                     .append(customer.getCellphone()).append("','")
-
+                    
                     //street1,street2,city,state,country,postalcode - 6
-                    .append("").append("','")
-                    .append("").append("','")
-                    .append("").append("','")
-                    .append("").append("','")
-                    .append("").append("','")
-                    .append("").append("',")
+                    .append(customer.getAddress_1()).append("','")
+                    .append(customer.getAddress_2()).append("','")
+                    .append(customer.getCity()).append("','")
+                    .append(customer.getCounty()).append("','")
+                    .append(customer.getCountry()).append("','")
+                    .append(customer.getPostal_code()).append("',")
 
                     // failedattempts,lastfailedattempton,accessedfromip,accessedon - 4
                     .append(0).append(",")

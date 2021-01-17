@@ -33,6 +33,7 @@ public class DataPortProcessor {
 //		dataPortProcessor.generateCreditGroupRelatedSQL();
 //		dataPortProcessor.generateBusinessRelatedSQL();
 
+
     }
 	
 	private void generateBusinessRelatedSQL() throws IOException {
