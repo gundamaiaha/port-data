@@ -80,6 +80,27 @@ public class CreditGroupService {
 		return creditGroups;
 
 	}
+	
+	
+    public List<String> getExistingCreditGroupIds() {
+        List<CreditGroup> creditGroups = new ArrayList<>();
+        final String file = "src/main/resources/csv/existingcreditgroups.csv";
+        try {
+            CSVReader csvReader = new CSVReader(new FileReader(file));
+            CsvToBean<CreditGroup> csvToBean = new CsvToBean<CreditGroup>();
+
+            HeaderColumnNameMappingStrategy strategy = new HeaderColumnNameMappingStrategy();
+            strategy.setType(CreditGroup.class);
+
+            creditGroups = csvToBean.parse(strategy, csvReader);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println("no of credit groups -->"+creditGroups.size());
+
+
+        return creditGroups.stream().map(CreditGroup::getId).collect(Collectors.toList());
+    }
 }
 
 

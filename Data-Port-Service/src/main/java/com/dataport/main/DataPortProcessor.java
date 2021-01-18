@@ -28,63 +28,86 @@ public class DataPortProcessor {
 
 		DataPortProcessor dataPortProcessor = new DataPortProcessor();
 
-    	dataPortProcessor.generateInterpreterRelatedSQL();
-//		dataPortProcessor.generateCustomerRelatedSQL();
+		// dataPortProcessor.generateInterpreterRelatedSQL();
 //		dataPortProcessor.generateCreditGroupRelatedSQL();
 //		dataPortProcessor.generateBusinessRelatedSQL();
+		dataPortProcessor.generateRemainingCustomerRelatedSQL();
 
-
-    }
-	
-	private void generateBusinessRelatedSQL() throws IOException {
-        //reading business csv and getting all business beans
-        List<Business> businesses = new BusinessService().buildBusinesssFromCsv();
-//        System.out.println("businesses = " + businesses);
-        System.out.println("no of businesses = " + businesses.size());
-        
-        List<Customer> customers = new CustomerService().buildCustomerFromCsv();
-//        System.out.println("customers = " + customers);
-        System.out.println("no of customers = " + customers.size());
-        
-        BusinessEntity businessEntity = new BusinessEntity();
-        businessEntity.generateBusiness(customers, businesses);
 	}
-    
-    private void generateInterpreterRelatedSQL() throws IOException {
-        //reading agents csv and getting all agent beans
-        List<Agent> agents = new AgentService().buildAgentsFromCsv();
-        System.out.println("agents = " + agents);
-        System.out.println("no of agents = "+agents.size());
-        
-        InterpreterEntity interpreterEntity = new InterpreterEntity();
-        interpreterEntity.generateInterpreterSql(agents);
 
-        InterpreterSpecialityMapEntity interpreterSpecialityMapEntity= new InterpreterSpecialityMapEntity();
-        interpreterSpecialityMapEntity.generateInterpreterSpecialityMap(agents);
+	private void generateBusinessRelatedSQL() throws IOException {
+		// reading business csv and getting all business beans
+		List<Business> businesses = new BusinessService().buildBusinesssFromCsv();
+//        System.out.println("businesses = " + businesses);
+		System.out.println("no of businesses = " + businesses.size());
 
-        List<User> users= new UserService().buildUsersFromCsv();
-        System.out.println("users = "+users);
-        System.out.println("no of users = "+users.size());
+		List<Customer> customers = new CustomerService().buildCustomerFromCsv();
+//        System.out.println("customers = " + customers);
+		System.out.println("no of customers = " + customers.size());
 
-        Map<String, String> userNamesMap = agents.stream().collect(Collectors.toMap(Agent::getUserId, Agent::getDescription));
-        UserEntity userEntity= new UserEntity();
-        userEntity.generateUserSqls(users,userNamesMap);
+		BusinessEntity businessEntity = new BusinessEntity();
+		businessEntity.generateBusiness(customers, businesses);
+	}
 
-        UserRoleMapEntity userRoleMapEntity= new UserRoleMapEntity();
-        userRoleMapEntity.generateUserRoleMapSql(users);
+	private void generateRemainingCustomerRelatedSQL() throws IOException {
 
+		List<Customer> customers = new CustomerService().buildCustomerFromCsv();
+//        System.out.println("customers = " + customers);
+		System.out.println("no of customers = " + customers.size());
 
+		List<String> existingCustomers = new CustomerService().buildexistingCustomerFromCsv();
+//      System.out.println("customers = " + customers);
+		System.out.println("no of existing = " + existingCustomers.size());
 
+		List<String> existingCreditGroup = new CreditGroupService().getExistingCreditGroupIds();
+		System.out.println("no of existing = " + existingCustomers.size());
+		
+		List<String> exitingNumber = new CustomerService().buildexistingNumberFromCsv();
+		System.out.println("no of existing = " + exitingNumber.size());
+		
+		List<String> exitingUserWithRoleUser = new CustomerService().buildexistingUserWithRoleUserFromCsv();
+		System.out.println("no of existing User with Role = " + exitingUserWithRoleUser.size());
+		
+		CustomerEntity customerEntity = new CustomerEntity();
+		customerEntity.generateRemainingCustomer(customers, existingCustomers, existingCreditGroup, 
+				exitingNumber, exitingUserWithRoleUser);
+	}
 
+	private void generateInterpreterRelatedSQL() throws IOException {
+		// reading agents csv and getting all agent beans
+		List<Agent> agents = new AgentService().buildAgentsFromCsv();
+		System.out.println("agents = " + agents);
+		System.out.println("no of agents = " + agents.size());
 
-    }
+		List<User> users = new UserService().buildUsersFromCsv();
+		System.out.println("users = " + users);
+		System.out.println("no of users = " + users.size());
 
-    private void generateCustomerRelatedSQL() throws IOException {
-        //reading customer csv and getting all customer beans
-        List<Customer> customers = new CustomerService().buildCustomerFromCsv();
-        System.out.println("customers = " + customers);
-        System.out.println("no of customers = " + customers.size());
-        
+		InterpreterEntity interpreterEntity = new InterpreterEntity();
+		interpreterEntity.generateInterpreterSql(agents);
+
+		InterpreterSpecialityMapEntity interpreterSpecialityMapEntity = new InterpreterSpecialityMapEntity();
+		interpreterSpecialityMapEntity.generateInterpreterSpecialityMap(agents);
+
+		InterpreterProviderMapEntity interpreterProviderMapEntity = new InterpreterProviderMapEntity();
+		interpreterProviderMapEntity.generateInterpreterProviderMapSQL(users);
+
+		Map<String, String> userNamesMap = agents.stream()
+				.collect(Collectors.toMap(Agent::getUserId, Agent::getDescription));
+		UserEntity userEntity = new UserEntity();
+		userEntity.generateUserSqls(users, userNamesMap);
+
+		UserRoleMapEntity userRoleMapEntity = new UserRoleMapEntity();
+		userRoleMapEntity.generateUserRoleMapSql(users);
+
+	}
+
+	private void generateCustomerRelatedSQL() throws IOException {
+		// reading customer csv and getting all customer beans
+		List<Customer> customers = new CustomerService().buildCustomerFromCsv();
+//        System.out.println("customers = " + customers);
+		System.out.println("no of customers = " + customers.size());
+
 //        CustomerEntity customerEntity = new CustomerEntity();
 //        customerEntity.generateUserAuthDbSql(customers);
 //
@@ -92,37 +115,33 @@ public class DataPortProcessor {
 //        customerRoleMapEntity.generateUserRoleMapSql(customers);
 //
 //
-        NumberEntity numberEntity= new NumberEntity();
-        numberEntity.generateNumbersSqlForGuest(customers);
-        numberEntity.generateNumbersSqlForMemberWithOnlyCreditPlan(customers);
-        
-        //get Selected CreditGroup owners Map
-        CreditGroupService creditGroupService= new CreditGroupService();
-        final Map<String, CreditGroupWithOwner> creditGroupWithOwnersMap = creditGroupService.getCreditGroupWithOwners(customers);
+		NumberEntity numberEntity = new NumberEntity();
+		numberEntity.generateNumbersSqlForGuest(customers);
+		numberEntity.generateNumbersSqlForMemberWithOnlyCreditPlan(customers);
 
-        //generate number sql for selected credit group
-        numberEntity.generateNumbersSqlForCreditGroups(customers,creditGroupWithOwnersMap);
+		// get Selected CreditGroup owners Map
+		CreditGroupService creditGroupService = new CreditGroupService();
+		final Map<String, CreditGroupWithOwner> creditGroupWithOwnersMap = creditGroupService
+				.getCreditGroupWithOwners(customers);
 
+		// generate number sql for selected credit group
+		numberEntity.generateNumbersSqlForCreditGroups(customers, creditGroupWithOwnersMap);
 
-    }
+	}
 
-    private void generateCreditGroupRelatedSQL() throws IOException {
-        //reading credit group csv and getting all credit group beans
-        List<CreditGroup> creditGroups = new CreditGroupService().buildCreditGroupsFromCsv();
+	private void generateCreditGroupRelatedSQL() throws IOException {
+		// reading credit group csv and getting all credit group beans
+		List<CreditGroup> creditGroups = new CreditGroupService().buildCreditGroupsFromCsv();
 //        System.out.println("creditGroups = " + creditGroups);
-        System.out.println("no of creditGroups = " + creditGroups.size());
-        
-        List<Customer> customers = new CustomerService().buildCustomerFromCsv();
+		System.out.println("no of creditGroups = " + creditGroups.size());
+
+		List<Customer> customers = new CustomerService().buildCustomerFromCsv();
 //        System.out.println("customers = " + customers);
-        System.out.println("no of customers = " + customers.size());
-        
-        CreditGroupEntity creditGroupEntity = new CreditGroupEntity();
-        creditGroupEntity.generateCreditGroups(customers, creditGroups);
+		System.out.println("no of customers = " + customers.size());
 
-    }
+		CreditGroupEntity creditGroupEntity = new CreditGroupEntity();
+		creditGroupEntity.generateCreditGroups(customers, creditGroups);
 
+	}
 
-
-
-    
 }

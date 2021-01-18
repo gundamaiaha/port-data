@@ -86,7 +86,6 @@ public class UserEntity {
                     .append("b'0'").append(",")
                     .append("b'0'").append(",")
                     .append("b'0'").append(",")
-                    .append("b'0'").append(",")
 
                     //credexpired,status,resettoken,tokenexpirydate
                     .append("b'0'").append(",")
