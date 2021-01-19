@@ -31,10 +31,50 @@ public class DataPortProcessor {
 		// dataPortProcessor.generateInterpreterRelatedSQL();
 //		dataPortProcessor.generateCreditGroupRelatedSQL();
 //		dataPortProcessor.generateBusinessRelatedSQL();
-		dataPortProcessor.generateRemainingCustomerRelatedSQL();
+//		dataPortProcessor.generateRemainingCustomerRelatedSQL();
+		dataPortProcessor.generateRemainingMemberCustomerSQL();
 
 	}
+	
+	
+	private void generateExtnForExistingUsers() throws IOException {
+		List<Customer> customers = new CustomerService().buildCustomerFromCsv();
+//      System.out.println("customers = " + customers);
+		System.out.println("no of customers = " + customers.size());
 
+		List<String> existingCustomers = new CustomerService().buildexistingCustomerFromCsv();
+//    System.out.println("customers = " + customers);
+		System.out.println("no of existing = " + existingCustomers.size());
+		
+		CustomerEntity customerEntity = new CustomerEntity();
+		customerEntity.generateExtnForExistingUsers(customers, existingCustomers);
+	}
+
+	private void generateRemainingMemberCustomerSQL() throws IOException {
+		List<Customer> customers = new CustomerService().buildCustomerFromCsv();
+//      System.out.println("customers = " + customers);
+		System.out.println("no of customers = " + customers.size());
+
+		List<String> existingCustomers = new CustomerService().buildexistingCustomerFromCsv();
+//    System.out.println("customers = " + customers);
+		System.out.println("no of existing = " + existingCustomers.size());
+
+		List<String> existingCreditGroup = new CreditGroupService().getExistingCreditGroupIds();
+		System.out.println("no of existing = " + existingCustomers.size());
+		
+		List<String> exitingNumber = new CustomerService().buildexistingNumberFromCsv();
+		System.out.println("no of existing = " + exitingNumber.size());
+		
+		List<String> exitingUserWithRoleUser = new CustomerService().buildexistingUserWithRoleUserFromCsv();
+		System.out.println("no of existing User with Role = " + exitingUserWithRoleUser.size());
+		
+		CustomerEntity customerEntity = new CustomerEntity();
+		customerEntity.generateRemainingMemberCustomer(customers, existingCustomers, existingCreditGroup, 
+				exitingNumber, exitingUserWithRoleUser);
+
+		
+	}
+	
 	private void generateBusinessRelatedSQL() throws IOException {
 		// reading business csv and getting all business beans
 		List<Business> businesses = new BusinessService().buildBusinesssFromCsv();

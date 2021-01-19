@@ -49,7 +49,7 @@ public class NumberEntity {
                     .append(NULL).append(",'")
                     .append(customer.getId()).append("',")
                     .append(NULL).append(",'")
-                    .append("Guest").append("',")
+                    .append("extn").append("',")
                     .append(NULL).append(",'")
 
                     //mins_limit_type,mins_paid,mins_prepaid,mins_used,mins_owed,mins_updated_at

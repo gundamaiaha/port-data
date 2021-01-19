@@ -86,16 +86,19 @@ public class BusinessEntity {
     			continue;
     		}
 
-    		
+    		String numbertype= "";
         	if (!onlyDigits(phoneNumber)) {
 				phoneNumber = customer.getPhone_extension();
 				type = "Guest";
+				numbertype = "extn";
         	} else {
         		if (business.getPhone_number().substring(0, 2).equals("44")) {
         			type = "Member";
+        			numbertype = "twilio";
         			phoneNumber = "+" + business.getPhone_number();
         		} else if (business.getPhone_number().substring(0, 1).equals("0")) {
         			type = "External"; 
+        			numbertype = "external";
         			phoneNumber = "+44" + business.getPhone_number().substring(1);
         		} else {
         			System.out.println("Number neither starts with 0 nor 44 nor is a login");
@@ -224,7 +227,7 @@ public class BusinessEntity {
         	number_data_sql.append("('")
         		.append(phoneNumber)
 				.append("', '")
-				.append(type)
+				.append(numbertype)
 				.append("', ")
 				.append("null")
 				.append(", '")
