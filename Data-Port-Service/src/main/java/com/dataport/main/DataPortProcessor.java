@@ -6,16 +6,13 @@ import com.dataport.pojo.Agent;
 import com.dataport.pojo.CreditGroupWithOwner;
 import com.dataport.pojo.Customer;
 import com.dataport.pojo.User;
-import com.dataport.service.AgentService;
+import com.dataport.service.*;
 import com.dataport.pojo.Business;
 import com.dataport.pojo.CreditGroup;
 import com.dataport.pojo.Customer;
 import com.dataport.pojo.User;
 import com.dataport.service.AgentService;
-import com.dataport.service.BusinessService;
-import com.dataport.service.CreditGroupService;
-import com.dataport.service.CustomerService;
-import com.dataport.service.UserService;
+import com.dataport.util.ListCompare;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,8 +29,9 @@ public class DataPortProcessor {
 //		dataPortProcessor.generateCreditGroupRelatedSQL();
 //		dataPortProcessor.generateBusinessRelatedSQL();
 //		dataPortProcessor.generateRemainingCustomerRelatedSQL();
-		dataPortProcessor.generateRemainingMemberCustomerSQL();
-
+// 		dataPortProcessor.generateRemainingMemberCustomerSQL();
+		dataPortProcessor.compareCreditGroupFiles();
+		dataPortProcessor.compareCreditPlanFiles();
 	}
 	
 	
@@ -182,6 +180,40 @@ public class DataPortProcessor {
 		CreditGroupEntity creditGroupEntity = new CreditGroupEntity();
 		creditGroupEntity.generateCreditGroups(customers, creditGroups);
 
+	}
+
+	/**
+	 * This function will compare existing credit plan data with original credit plan
+	 */
+	private void compareCreditPlanFiles(){
+		String existingCreditPlanFileName = "existingcreditplan.csv";
+		String originalCreditPlanFileName = "credit_plans.csv";
+
+		List<String> existingCreditPlanIds = new CreditPlanService().getCreditPlanIdsForFile(existingCreditPlanFileName);
+		List<String> originalCreditPlanIds = new CreditPlanService().getCreditPlanIdsForFile(originalCreditPlanFileName);
+
+		List<String> result = ListCompare.compare(existingCreditPlanIds, originalCreditPlanIds);
+
+		System.out.println("Below or the credit plan ids present in existing credit plan file and not present in original credit plan file");
+		System.out.println(result);
+		System.out.println("--------------------------");
+	}
+
+	/**
+	 * This function will compare existing credit group data with original credit group
+	 */
+	private void compareCreditGroupFiles(){
+		String existingCreditGroupFileName = "existingcreditgroups.csv";
+		String originalCreditGroupFileName = "credit_groups.csv";
+
+		List<String> existingCreditGroupIds = new CreditGroupService().getCreditGroupIdsForFile(existingCreditGroupFileName);
+		List<String> originalCreditGroupIds = new CreditGroupService().getCreditGroupIdsForFile(originalCreditGroupFileName);
+
+		List<String> result = ListCompare.compare(originalCreditGroupIds, existingCreditGroupIds);
+
+		System.out.println("Below or the credit group ids present in existing credit group file and not present in original credit group file");
+		System.out.println(result);
+		System.out.println("--------------------------");
 	}
 
 }
