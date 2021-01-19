@@ -194,7 +194,7 @@ public class DataPortProcessor {
 
 		List<String> result = ListCompare.compare(existingCreditPlanIds, originalCreditPlanIds);
 
-		System.out.println("Below or the credit plan ids present in existing credit plan file and not present in original credit plan file");
+		System.out.println("Below are the credit plan ids present in existing credit plan file and not present in original credit plan file");
 		System.out.println(result);
 		System.out.println("--------------------------");
 	}
@@ -211,7 +211,7 @@ public class DataPortProcessor {
 
 		List<String> result = ListCompare.compare(originalCreditGroupIds, existingCreditGroupIds);
 
-		System.out.println("Below or the credit group ids present in existing credit group file and not present in original credit group file");
+		System.out.println("Below are the credit group ids present in existing credit group file and not present in original credit group file");
 		System.out.println(result);
 		System.out.println("--------------------------");
 	}
