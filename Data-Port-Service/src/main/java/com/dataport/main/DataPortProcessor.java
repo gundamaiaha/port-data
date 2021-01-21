@@ -25,15 +25,18 @@ public class DataPortProcessor {
 
 		DataPortProcessor dataPortProcessor = new DataPortProcessor();
 
-		// dataPortProcessor.generateInterpreterRelatedSQL();
+//d		dataPortProcessor.generateInterpreterRelatedSQL();
 //		dataPortProcessor.generateCreditGroupRelatedSQL();
-//		dataPortProcessor.generateBusinessRelatedSQL();
+//d		dataPortProcessor.generateBusinessRelatedSQL();
 //		dataPortProcessor.generateRemainingCustomerRelatedSQL();
 // 		dataPortProcessor.generateRemainingMemberCustomerSQL();
-		dataPortProcessor.compareCreditGroupFiles();
-		dataPortProcessor.compareCreditPlanFiles();
+//		dataPortProcessor.compareCreditGroupFiles();
+//		dataPortProcessor.compareCreditPlanFiles();
+//		dataPortProcessor.generateRemainingMemberCustomerSQL();
+		dataPortProcessor.generateExtnForExistingUsers();
+
 	}
-	
+
 	
 	private void generateExtnForExistingUsers() throws IOException {
 		List<Customer> customers = new CustomerService().buildCustomerFromCsv();
@@ -44,8 +47,11 @@ public class DataPortProcessor {
 //    System.out.println("customers = " + customers);
 		System.out.println("no of existing = " + existingCustomers.size());
 		
+		List<String> existingExtnNumbers = new CustomerService().buildexistingExtnNumberFromCsv();
+		System.out.println("no of existing Extn Number = " + existingExtnNumbers.size());
+		
 		CustomerEntity customerEntity = new CustomerEntity();
-		customerEntity.generateExtnForExistingUsers(customers, existingCustomers);
+		customerEntity.generateExtnForExistingUsers(customers, existingCustomers, existingExtnNumbers);
 	}
 
 	private void generateRemainingMemberCustomerSQL() throws IOException {

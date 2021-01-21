@@ -11,23 +11,105 @@ import org.apache.commons.lang3.StringUtils;
 
 public class CustomerEntity {
 	
-    final StringBuilder number_data_sql = new StringBuilder("USE `convovridb` ;\n\n");
+    StringBuilder number_data_sql = new StringBuilder("USE `convovridb` ;\n\n");
 	StringBuilder userauth_data_sql = new StringBuilder("USE `convouserauth` ;\n\n");
-    final StringBuilder uservri_data_sql = new StringBuilder("USE `convovridb` ;\n\n");
-    final StringBuilder user_role_data_sql = new StringBuilder("USE `convovridb` ;\n\n");
+    StringBuilder uservri_data_sql = new StringBuilder("USE `convovridb` ;\n\n");
+    StringBuilder user_role_data_sql = new StringBuilder("USE `convovridb` ;\n\n");
     
     
-    public void generateExtnForExistingUsers(List<Customer> customers, List<String> existingCustomers) throws IOException{
+    public void generateExtnForExistingUsers(List<Customer> customers, 
+    		List<String> existingCustomers, List<String> existingExtnNumbers) throws IOException{
         number_data_sql.append("INSERT IGNORE INTO number (")
         .append("number,number_type_id,twilio_number_sid,owned_by,owned_by_type,owned_by_desc,used_by,used_by_desc,credit_type,credit_plan_id_or_group_id," +
                 "mins_limit_type,mins_paid,mins_prepaid,mins_used,mins_owed,mins_updated_at" +
                 ",mins_reloaded_at,expire_on,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by) ")
         .append(" VALUES\n");
         
+        userauth_data_sql.append("INSERT IGNORE INTO user(")
+        .append("userid,email,username,password,email_verified,firstname,lastname,name,phonenumber," +
+                "street1,street2,city,state,country,postalcode,failedattempts,lastfailedattempton,accessedfromip" +
+                ",accessedon,designation,image_url,provider,provider_id,disabled,locked,expired,credexpired,status," +
+                "resettoken,tokenexpirydate,createdon,createdby,modifiedon,modifiedby,deletedon,deletedby,token) ")
+        	.append("VALUES\n");
+
+
+        uservri_data_sql.append("INSERT IGNORE INTO user(")
+        	.append("id,firstname,lastname,email,token,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by) ")
+        	.append("VALUES\n");
+
+
+        user_role_data_sql.append("INSERT IGNORE INTO user_role_map(")
+        	.append("user_id,role_id,status,created_on,created_by,modified_on,modified_by,deleted_on,deleted_by)")
+        	.append(" VALUES\n");
+        
         
         FileWriter fileWriter = new FileWriter("src/main/resources/sql/user_vridb_guestExtnforExisitngUser.sql"); 
         
         
+        for (Customer customer : customers) {
+        	
+        	if (existingCustomers.contains(customer.getId())) {
+        		System.out.println("User is present in db "  + customer.getId() + "| " + customer.getName());
+        	} else {
+        		continue;
+        	}
+        	
+        	if (StringUtils.isBlank(customer.getPhone_extension())) {
+        		System.out.println("User is has blank Extn phone number " + customer.getId() + "| " + customer.getName());
+        		continue;
+        	}
+        	
+        	if (existingExtnNumbers.contains(customer.getPhone_extension())) {
+        		System.out.println("User is Extn phone number is already present in DB" + customer.getId() + "| " + customer.getName());
+        		continue;
+        	}
+        	
+        	createUserAuthRecord(customer);
+        	createUserVRIRecord(customer);
+        	createUserRoleRecord(customer);
+        	createExtnNumberRecord(customer);
+        	
+        }
+        
+        userauth_data_sql.deleteCharAt(userauth_data_sql.lastIndexOf(","));
+        userauth_data_sql.append(";");
+
+        System.out.println("============== UserAuth SQL =============== ");
+        System.out.println(userauth_data_sql.toString());
+        fileWriter.write("============== UserAuth SQL =============== \n");
+        fileWriter.write(userauth_data_sql.toString());
+        fileWriter.write("");
+
+        
+        uservri_data_sql.deleteCharAt(uservri_data_sql.lastIndexOf(","));
+        uservri_data_sql.append(";");
+
+        System.out.println("============== UserVRI SQL =============== ");
+        System.out.println(uservri_data_sql.toString());
+        fileWriter.write("============== UserVRI SQL =============== \n");
+        fileWriter.write(uservri_data_sql.toString());
+        fileWriter.write("");
+        
+        
+        user_role_data_sql.deleteCharAt(user_role_data_sql.lastIndexOf(","));
+        user_role_data_sql.append(";");
+
+        System.out.println("============== User Role VRI SQL =============== ");
+        System.out.println(user_role_data_sql.toString());
+        fileWriter.write("============== User Role VRI SQL =============== \n");
+        fileWriter.write(user_role_data_sql.toString());
+        fileWriter.write("");
+
+        
+        number_data_sql.deleteCharAt(number_data_sql.lastIndexOf(","));
+        number_data_sql.append(";");
+
+        System.out.println("============== Business Number SQL =============== ");
+        System.out.println(number_data_sql.toString());
+        fileWriter.write("============== Business Number SQL =============== \n");
+        fileWriter.write(number_data_sql.toString());
+
+        fileWriter.close();
     }
     
     public void generateRemainingMemberCustomer(List<Customer> customers, List<String> existingCustomers, 
@@ -450,13 +532,13 @@ public class CustomerEntity {
 		.append(customer.getMins_used())
 		.append(", ")
 		.append(customer.getMins_owed())
-		.append(", '")
-		.append(customer.getMins_updated_at())
-		.append("', '")
-		.append(customer.getMins_reloaded_at())
-		.append("', '")
-		.append(customer.getExpire_on())
-		.append("', 'active','")
+		.append(", ")
+		.append("null")
+		.append(", ")
+		.append("null")
+		.append(", ")
+		.append("null")
+		.append(", 'active','")
 		.append(customer.getInserted_at())
 		.append("',null, '")
 		.append(customer.getUpdated_at())

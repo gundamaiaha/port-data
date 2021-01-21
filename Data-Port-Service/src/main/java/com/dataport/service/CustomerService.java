@@ -59,7 +59,29 @@ public class CustomerService {
 		
 		return customers.stream().map(Id::getId).collect(Collectors.toList());
 	}
-	
+
+	public List<String> buildexistingExtnNumberFromCsv() {
+		List<Id> numbers = new ArrayList<Id>();
+		final String file = "src/main/resources/csv/exitingExtnNumber.csv";
+		try {
+			CSVReader csvReader = new CSVReader(new FileReader(file));
+			CsvToBean<Id> csvToBean = new CsvToBean<Id>();
+
+			HeaderColumnNameMappingStrategy strategy = new HeaderColumnNameMappingStrategy();
+			strategy.setType(Id.class);
+
+			numbers = csvToBean.parse(strategy, csvReader);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Existing Extn Numbers");
+		System.out.println(numbers);
+		System.out.println("=======\n");
+		
+		return numbers.stream().map(Id::getId).collect(Collectors.toList());
+
+	}
+
 	
 	public List<String> buildexistingNumberFromCsv() {
 		List<Id> numbers = new ArrayList<Id>();
