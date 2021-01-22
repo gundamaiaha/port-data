@@ -12,7 +12,7 @@ import com.dataport.pojo.Business;
 import com.dataport.pojo.Customer;
 
 public class BusinessEntity {
-	
+	 
 	//External Member Guest  - type
 
 	public void generateBusiness(List<Customer> customers, List<Business> businesses) throws IOException {
@@ -23,7 +23,7 @@ public class BusinessEntity {
                 .append("id,parent_id,name,phonenumber,number,type,description,businesscol,street1,street2,city,"
                 		+ "state,country,postalcode,lat,lon,url,photo_url,public,category_tags,priority,"
                 		+ "billing_code,status,createdon,createdby,modifiedon,modifiedby,deletedon,deletedby) ")
-                .append("VALUES\n");
+                .append("VALUES\n ");
         String NULL = null;
         
         final StringBuilder business_user_map_data_sql =

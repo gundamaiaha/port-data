@@ -45,13 +45,17 @@ public class CustomerEntity {
         
         FileWriter fileWriter = new FileWriter("src/main/resources/sql/user_vridb_guestExtnforExisitngUser.sql"); 
         
-        
+        boolean isCustomerPresent = false;
+        boolean isNumberPresent = false;
         for (Customer customer : customers) {
-        	
+        	isCustomerPresent = false;
+        	isNumberPresent = false;
+        			
         	if (existingCustomers.contains(customer.getId())) {
         		System.out.println("User is present in db "  + customer.getId() + "| " + customer.getName());
+        		isCustomerPresent = true;
         	} else {
-        		continue;
+        		isCustomerPresent = false;
         	}
         	
         	if (StringUtils.isBlank(customer.getPhone_extension())) {
@@ -61,13 +65,18 @@ public class CustomerEntity {
         	
         	if (existingExtnNumbers.contains(customer.getPhone_extension())) {
         		System.out.println("User is Extn phone number is already present in DB" + customer.getId() + "| " + customer.getName());
-        		continue;
+        		isNumberPresent = true;
         	}
         	
-        	createUserAuthRecord(customer);
-        	createUserVRIRecord(customer);
-        	createUserRoleRecord(customer);
-        	createExtnNumberRecord(customer);
+        	if (!isCustomerPresent) {
+        		createUserAuthRecord(customer);
+        		createUserVRIRecord(customer);
+        		createUserRoleRecord(customer);
+        	}
+        	
+        	if (!isNumberPresent) {
+        		createExtnNumberRecord(customer);
+        	}
         	
         }
         

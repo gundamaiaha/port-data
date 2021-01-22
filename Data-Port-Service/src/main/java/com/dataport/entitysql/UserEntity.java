@@ -1,5 +1,6 @@
 package com.dataport.entitysql;
 
+import com.dataport.pojo.Customer;
 import com.dataport.pojo.User;
 import org.apache.commons.lang3.StringUtils;
 
@@ -10,6 +11,19 @@ import java.util.Map;
 
 public class UserEntity {
 
+	
+	public void  findInterpreterInUser(List<Customer> customers, List<User> interpreters)  throws IOException {
+		
+		for (Customer customer : customers) {
+			
+			for (User interpreter : interpreters) {
+				if (customer.getEmail().equals(interpreter.getEmail())) {
+					System.out.println(interpreter.getEmail() + " Replace customer id " + customer.getId() + 
+							" with ");
+				}
+			}
+		}
+	}
 
     public void generateUserSqls(List<User> users, Map<String, String> userNamesMap) throws IOException {
 

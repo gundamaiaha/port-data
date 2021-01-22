@@ -11,7 +11,6 @@ import com.dataport.pojo.Business;
 import com.dataport.pojo.CreditGroup;
 import com.dataport.pojo.Customer;
 import com.dataport.pojo.User;
-import com.dataport.service.AgentService;
 import com.dataport.util.ListCompare;
 
 import java.io.IOException;
@@ -33,10 +32,24 @@ public class DataPortProcessor {
 //		dataPortProcessor.compareCreditGroupFiles();
 //		dataPortProcessor.compareCreditPlanFiles();
 //		dataPortProcessor.generateRemainingMemberCustomerSQL();
-		dataPortProcessor.generateExtnForExistingUsers();
+//		dataPortProcessor.generateExtnForExistingUsers();
+		dataPortProcessor.findInterpreterInUser();
+		
 
 	}
 
+	
+	private void findInterpreterInUser() throws IOException {
+		List<Customer> customers = new CustomerService().buildCustomerFromCsv();
+		System.out.println("no of customers = " + customers.size());
+		
+		List<User> interpreters = new UserService().buildUsersFromCsv();
+		System.out.println("no of interpreters = " + interpreters.size());
+		
+		UserEntity userEntity = new UserEntity();
+		userEntity.findInterpreterInUser(customers, interpreters);
+	}
+	
 	
 	private void generateExtnForExistingUsers() throws IOException {
 		List<Customer> customers = new CustomerService().buildCustomerFromCsv();
